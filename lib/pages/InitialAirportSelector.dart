@@ -6,7 +6,6 @@ class InitialAirportSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<ApplicationState>(context);
-    // print(ModalRoute.of(context).settings.arguments);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -79,23 +78,47 @@ class InitialAirportSelector extends StatelessWidget {
                 ),
                 Container(
                   height: 500,
-                  child: ListView.builder(
-                    itemCount: appState.airports.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          onTap: () {
-                            appState.setSelectedInitialAirport(index + 1);
-                            Navigator.pop(context);
+                  child: appState.isSearching &&
+                          (appState.searchResult.length == 0)
+                      ? Container(
+                          margin: EdgeInsets.all(30),
+                          padding: EdgeInsets.all(20),
+                          child: Text(
+                            'No Airport Found!',
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontFamily: 'Lato',
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: !appState.isSearching
+                              ? appState.airports.length
+                              : appState.searchResult.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: ListTile(
+                                onTap: () {
+                                  appState.setSelectedInitialAirport(
+                                      appState.isSearching
+                                          ? appState.searchResult[index].id
+                                          : appState.airports[index].id);
+                                  appState.setSearchString('');
+                                  appState.changeIsSearching(false);
+                                  Navigator.pop(context);
+                                },
+                                leading:
+                                    Icon(Icons.airplanemode_active_rounded),
+                                title: Text(
+                                  !appState.isSearching
+                                      ? '${appState.airports[index].townName}, ${appState.airports[index].airportName}'
+                                      : '${appState.searchResult[index].townName}, ${appState.searchResult[index].airportName}',
+                                ),
+                              ),
+                            );
                           },
-                          leading: Icon(Icons.airplanemode_active_rounded),
-                          title: Text(
-                              '${appState.airports[index].townName}, ${appState.airports[index].airportName}'),
                         ),
-                      );
-                    },
-                  ),
                 )
               ],
             ),

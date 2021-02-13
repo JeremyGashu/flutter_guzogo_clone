@@ -97,20 +97,27 @@ class ApplicationState extends ChangeNotifier {
   ];
 
   void setSearchString(String val) {
-    this.searchString = val;
-    this.searchResult = this.airports.map((element) {
-      if (element.airportName.contains(RegExp(
-        val,
-        caseSensitive: false,
-      ))) {
-        return element;
+    if (val != '') {
+      this.searchString = val;
+      List<Airport> _filtered = [];
+      for (int i = 0; i < this.airports.length; i++) {
+        if (this
+            .airports[i]
+            .airportName
+            .contains(RegExp(val, caseSensitive: false))) {
+          _filtered.add(this.airports[i]);
+        }
       }
-    }).toList();
-    notifyListeners();
+      this.searchResult = _filtered;
+      notifyListeners();
+    }
   }
 
   void changeIsSearching(bool val) {
     this.isSearching = val;
+    if (this.isSearching == false) {
+      this.searchResult = [];
+    }
     notifyListeners();
   }
 

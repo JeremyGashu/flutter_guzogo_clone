@@ -15,9 +15,11 @@ class HomePage extends StatelessWidget {
           child: Container(
             child: Center(
               child: Column(
+                // mainAxisSize: MainAxisSize.max,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height / 2.4,
+                    height: MediaQuery.of(context).size.height / 1.8,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.purple[900],
@@ -30,6 +32,8 @@ class HomePage extends StatelessWidget {
                     ),
                     child: SafeArea(
                       child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Padding(
                             padding: EdgeInsets.all(10),
